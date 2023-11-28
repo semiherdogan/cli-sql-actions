@@ -18,32 +18,25 @@ pub fn cli_select(items: Vec<String>) -> Option<usize> {
 }
 
 pub fn parse_clipboard() -> (Vec<String>, Vec<Vec<String>>) {
-    let mut ctx = ClipboardContext::new().unwrap();
+    let clipboard_contents = ClipboardContext::new().unwrap().get_contents().unwrap();
 
-    let clipboard_contents = ctx.get_contents().unwrap();
-
-    let mut headers: Vec<String> = vec![];
     let mut result: Vec<Vec<String>> = vec![];
-    let mut index = 0;
 
     for row in clipboard_contents.lines() {
-        index += 1;
-
         if row.trim() == "" {
             continue;
         }
 
-        let parse_row = row
+        let parse_row: Vec<String> = row
             .split("\t")
             .map(|s| s.to_string().replace("\"", "\\\"").replace("`", "\\`"))
-            .collect::<Vec<String>>();
+            .collect();
 
-        if index == 1 {
-            headers = parse_row;
-        } else {
-            result.push(parse_row);
-        }
+        result.push(parse_row);
     }
 
-    (headers, result)
+    let headers = result[0].clone();
+    result.remove(0);
+
+    return (headers, result);
 }

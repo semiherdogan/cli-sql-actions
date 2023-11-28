@@ -1,32 +1,22 @@
-use crate::utils::{cli_input, parse_clipboard};
-
-pub fn insert() {
-    let table_name = get_table_name();
-
-    let (headers, data) = parse_clipboard();
+pub fn insert_query(table_name: String, headers: Vec<String>, data: Vec<Vec<String>>) {
+    let join_headers = headers.join("`, `");
 
     for d in data {
         println!(
             "INSERT INTO {} (`{}`) VALUES (\"{}\");",
             table_name,
-            headers.join("`, `"),
+            join_headers,
             d.join("\", \""),
-        )
+        );
     }
 }
 
-pub fn update() {
-    let fields_input = cli_input("Where Fields:");
-
-    let where_fields: Vec<String> = fields_input
-        .split(",")
-        .map(|s| s.trim().to_string())
-        .collect();
-
-    let table_name = get_table_name();
-
-    let (headers, data) = parse_clipboard();
-
+pub fn update_query(
+    table_name: String,
+    headers: Vec<String>,
+    data: Vec<Vec<String>>,
+    where_fields: Vec<String>,
+) {
     for row in data {
         let mut wheres: Vec<String> = vec![];
         let mut sets: Vec<String> = vec![];
@@ -69,19 +59,16 @@ pub fn update() {
     }
 }
 
-pub fn insert_bulk() {
-    let length = cli_input("Bulk length:").parse::<i32>().unwrap();
+pub fn bulk_insert_query(
+    table_name: String,
+    headers: Vec<String>,
+    data: Vec<Vec<String>>,
+    bulk_length: i32,
+) {
+    let join_headers = headers.join("`, `");
 
-    let table_name = get_table_name();
-
-    let (headers, data) = parse_clipboard();
-
-    data.chunks(length as usize).for_each(|d| {
-        println!(
-            "INSERT INTO {} (`{}`) VALUES ",
-            table_name,
-            headers.join("`, `"),
-        );
+    data.chunks(bulk_length as usize).for_each(|d| {
+        println!("INSERT INTO {} (`{}`) VALUES ", table_name, join_headers,);
 
         for (i, r) in d.iter().enumerate() {
             print!("            (\"{}\")", r.join("\", \""));
@@ -95,9 +82,37 @@ pub fn insert_bulk() {
     });
 }
 
-fn get_table_name() -> String {
-    let table_name = format!("`{}`", cli_input("Table name:"));
-    cli_input("Copy data into clipboard and hit ENTER!");
+pub fn delete_query(
+    table_name: String,
+    headers: Vec<String>,
+    data: Vec<Vec<String>>,
+    where_fields: Vec<String>,
+) {
+    for row in data {
+        let mut wheres: Vec<String> = vec![];
 
-    return table_name;
+        for (index, column) in row.iter().enumerate() {
+            let val = format!("`{}`=\"{}\"", &headers[index], column);
+            if where_fields
+                .iter()
+                .filter(|w| w == &&headers[index])
+                .count()
+                > 0
+            {
+                wheres.push(val.clone());
+            }
+        }
+
+        print!("DELETE FROM {} WHERE", table_name);
+
+        wheres.iter().enumerate().for_each(|(i, s)| {
+            print!("{}", s);
+
+            if (i + 1) < wheres.len() {
+                print!(" AND ");
+            }
+        });
+
+        println!(";");
+    }
 }
