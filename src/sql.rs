@@ -17,7 +17,11 @@ pub fn insert() {
 
 pub fn update() {
     let fields_input = cli_input("Where Fields:");
-    let where_fields = fields_input.split(",").map(|s| s.trim().to_string());
+
+    let where_fields: Vec<String> = fields_input
+        .split(",")
+        .map(|s| s.trim().to_string())
+        .collect();
 
     let table_name = get_table_name();
 
@@ -28,10 +32,10 @@ pub fn update() {
         let mut sets: Vec<String> = vec![];
 
         for (index, column) in row.iter().enumerate() {
-            let val = format!("`{}`=\"{}\"", headers[index], column);
+            let val = format!("`{}`=\"{}\"", &headers[index], column);
             if where_fields
-                .clone()
-                .filter(|w| w == &headers[index])
+                .iter()
+                .filter(|w| w == &&headers[index])
                 .count()
                 > 0
             {
@@ -43,14 +47,14 @@ pub fn update() {
 
         print!("UPDATE {} SET ", table_name);
 
-        sets.clone().into_iter().enumerate().for_each(|(i, s)| {
+        sets.iter().enumerate().for_each(|(i, s)| {
             print!("{}", s);
             if (i + 1) < sets.len() {
                 print!(",");
             }
         });
 
-        wheres.clone().into_iter().enumerate().for_each(|(i, s)| {
+        wheres.iter().enumerate().for_each(|(i, s)| {
             if i == 0 {
                 print!(" WHERE ");
             }

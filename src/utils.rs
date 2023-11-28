@@ -9,17 +9,12 @@ pub fn cli_input(question: &str) -> String {
         .unwrap()
 }
 
-pub fn cli_select(items: Vec<&str>) -> usize {
-    let selection = Select::with_theme(&ColorfulTheme::default())
+pub fn cli_select(items: Vec<String>) -> Option<usize> {
+    Select::with_theme(&ColorfulTheme::default())
         .items(&items)
         .default(0)
         .interact_on_opt(&Term::stderr())
-        .unwrap();
-
-    return match selection {
-        Some(index) => index,
-        None => panic!(),
-    };
+        .unwrap()
 }
 
 pub fn parse_clipboard() -> (Vec<String>, Vec<Vec<String>>) {

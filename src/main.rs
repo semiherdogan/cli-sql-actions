@@ -1,16 +1,18 @@
 use cli_sql_actions::{actions::Actions, utils::cli_select};
 
 fn main() {
-    let actions = vec![
-        Actions::SqlInsert.str(),
-        Actions::SqlUpdate.str(),
-        Actions::SqlInsertBulk.str(),
+    let actions: Vec<Actions> = vec![
+        Actions::SqlInsert,
+        Actions::SqlUpdate,
+        Actions::SqlInsertBulk,
     ];
 
-    match cli_select(actions.clone()) {
-        0 => Actions::SqlInsert.run(),
-        1 => Actions::SqlUpdate.run(),
-        2 => Actions::SqlInsertBulk.run(),
-        _ => panic!(),
+    let selections: Vec<String> = actions.iter().map(|s| s.to_string()).collect();
+
+    let action = match cli_select(selections) {
+        Some(index) => &actions[index],
+        None => panic!(),
     };
+
+    action.run();
 }

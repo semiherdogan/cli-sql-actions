@@ -1,6 +1,5 @@
-// use std::fmt;
-
 use crate::sql;
+use std::fmt;
 
 pub enum Actions {
     SqlInsert,
@@ -9,15 +8,7 @@ pub enum Actions {
 }
 
 impl Actions {
-    pub fn str(self) -> &'static str {
-        match self {
-            Actions::SqlInsert => "Sql Insert",
-            Actions::SqlUpdate => "Sql Update",
-            Actions::SqlInsertBulk => "Sql Insert Bulk",
-        }
-    }
-
-    pub fn run(self) {
+    pub fn run(&self) {
         match self {
             Actions::SqlInsert => sql::insert(),
             Actions::SqlUpdate => sql::update(),
@@ -26,12 +17,12 @@ impl Actions {
     }
 }
 
-// impl fmt::Display for Actions {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         match self {
-//             Actions::SqlInsert => write!(f, "{}", Actions::SqlInsert.str()),
-//             Actions::SqlUpdate => write!(f, "{}", Actions::SqlUpdate.str()),
-//             Actions::SqlInsertBulk => write!(f, "{}", Actions::SqlInsertBulk.str()),
-//         }
-//     }
-// }
+impl fmt::Display for Actions {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Actions::SqlInsert => write!(f, "Sql Insert"),
+            Actions::SqlUpdate => write!(f, "Sql Update"),
+            Actions::SqlInsertBulk => write!(f, "Sql Insert Bulk"),
+        }
+    }
+}
