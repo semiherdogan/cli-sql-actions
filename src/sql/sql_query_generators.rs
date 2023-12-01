@@ -1,4 +1,4 @@
-pub fn insert_query(table_name: String, headers: Vec<String>, data: Vec<Vec<String>>) {
+pub fn insert(table_name: String, headers: Vec<String>, data: Vec<Vec<String>>) {
     let join_headers = headers.join("`, `");
 
     for d in data {
@@ -11,7 +11,7 @@ pub fn insert_query(table_name: String, headers: Vec<String>, data: Vec<Vec<Stri
     }
 }
 
-pub fn update_query(
+pub fn update(
     table_name: String,
     headers: Vec<String>,
     data: Vec<Vec<String>>,
@@ -59,7 +59,7 @@ pub fn update_query(
     }
 }
 
-pub fn bulk_insert_query(
+pub fn bulk_insert(
     table_name: String,
     headers: Vec<String>,
     data: Vec<Vec<String>>,
@@ -82,7 +82,7 @@ pub fn bulk_insert_query(
     });
 }
 
-pub fn delete_query(
+pub fn delete(
     table_name: String,
     headers: Vec<String>,
     data: Vec<Vec<String>>,
