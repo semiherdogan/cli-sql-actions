@@ -1,4 +1,4 @@
-use crate::sql::sql_query_generators;
+use crate::sql::query_generators;
 use crate::utils::{cli_input, parse_clipboard};
 
 pub fn insert() {
@@ -6,7 +6,7 @@ pub fn insert() {
 
     let (headers, data) = parse_clipboard();
 
-    sql_query_generators::insert(table_name, headers, data);
+    query_generators::insert(table_name, headers, data);
 }
 
 pub fn update() {
@@ -19,7 +19,7 @@ pub fn update() {
 
     let (headers, data) = parse_clipboard();
 
-    sql_query_generators::update(table_name, headers, data, where_fields);
+    query_generators::update(table_name, headers, data, where_fields);
 }
 
 pub fn insert_bulk() {
@@ -29,7 +29,7 @@ pub fn insert_bulk() {
 
     let (headers, data) = parse_clipboard();
 
-    sql_query_generators::bulk_insert(table_name, headers, data, bulk_length);
+    query_generators::bulk_insert(table_name, headers, data, bulk_length);
 }
 
 pub fn delete() {
@@ -42,7 +42,7 @@ pub fn delete() {
 
     let (headers, data) = parse_clipboard();
 
-    sql_query_generators::delete(table_name, headers, data, where_fields);
+    query_generators::delete(table_name, headers, data, where_fields);
 }
 
 fn get_table_name() -> String {

@@ -1,4 +1,4 @@
-use crate::sql::sql_actions;
+use crate::sql::actions;
 use std::fmt;
 
 pub enum Sql {
@@ -11,10 +11,10 @@ pub enum Sql {
 impl Sql {
     pub fn run(&self) {
         match self {
-            Sql::Insert => sql_actions::insert(),
-            Sql::Update => sql_actions::update(),
-            Sql::BulkInsert => sql_actions::insert_bulk(),
-            Sql::Delete => sql_actions::delete(),
+            Sql::Insert => actions::insert(),
+            Sql::Update => actions::update(),
+            Sql::BulkInsert => actions::insert_bulk(),
+            Sql::Delete => actions::delete(),
         }
     }
 }
