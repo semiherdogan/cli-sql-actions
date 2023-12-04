@@ -63,7 +63,7 @@ pub fn bulk_insert(
     table_name: String,
     headers: Vec<String>,
     data: Vec<Vec<String>>,
-    bulk_length: i32,
+    bulk_length: u16,
 ) {
     let join_headers = headers.join("`, `");
 

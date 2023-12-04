@@ -23,7 +23,7 @@ pub fn update() {
 }
 
 pub fn insert_bulk() {
-    let bulk_length = cli_input("Bulk length:").parse::<i32>().unwrap();
+    let bulk_length = cli_input("Bulk length:").parse::<u16>().unwrap();
 
     let table_name = get_table_name();
 

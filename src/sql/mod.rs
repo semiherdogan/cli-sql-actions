@@ -1,3 +1,3 @@
 mod actions;
 mod query_generators;
-pub mod sql;
+pub mod sql_enum;
